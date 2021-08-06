@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles.css" />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <% users.forEach(user => { %>
+    <div class="card">
+      <div class="top">
+        <h2 class="name first_name"><%= user.first_name %></h2>
+        <h2 class="name last_name"><%= user.last_name %></h2>
+
+        <img class="circle-img" src="<%= user.avatar %> " alt="avatar_img" />
+      </div>
+      <div class="bottom">
+        <p class="info"><%= user.email %></p>
+      </div>
+    </div>
+    <% }); %>
+
+    <div id="inserts"></div>
+
+    <div class="container">
+      <div class="btn-holder">
+        <button id="btn" type="button" class="btn btn-outline-secondary">
+          Load more
+        </button>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+
+    <!-- jQuery script  for loading other cards -->
+
+    <script>
+      $('#btn').click(function () {
+        $('#btn').replaceWith('<h4 >No more cards...</h4>');
+        const data = [];
+        $.ajax('https://reqres.in/api/users?page=2', {
+          success: function (response) {
+            data.push(response.data);
+            const chunk = data[0];
+            console.log(chunk);
+            for (let index = 0; index <= chunk.length; index++) {
+              $(
+                `
+              <div class="card">
+                <div class="top">
+                  <h2 class="name first_name">` +
+                  chunk[index].first_name +
+                  `</h2>
+                  <h2 class="name last_name">` +
+                  chunk[index].last_name +
+                  `</h2>
+                  <img class="circle-img" src="` +
+                  chunk[index].avatar +
+                  `" alt="avatar_img" />
+                </div>
+                <div class="bottom">
+                  <p class="info">` +
+                  chunk[index].email +
+                  `</p>
+                </div>
+              </div>
+              `
+              ).appendTo('#inserts');
+            }
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
