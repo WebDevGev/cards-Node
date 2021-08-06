@@ -52,7 +52,6 @@
           success: function (response) {
             data.push(response.data);
             const chunk = data[0];
-            console.log(chunk);
             for (let index = 0; index <= chunk.length; index++) {
               $(
                 `
